@@ -1,0 +1,14 @@
+version: "3.9"
+volumes:
+  shared-workspace:
+services:
+  base:
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+    image: base
+  sparkbase:
+    build:
+      context: .
+      dockerfile: Dockerfile.sparkbase
+      
