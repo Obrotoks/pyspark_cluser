@@ -21,8 +21,6 @@ RUN ln -s /urs/bin/python
 
 ARG spark_version="3.4.0"
 ARG hadoop_version="3"
-ARG tipo
-ARG tipomaster="master"
 
 # - Download Apache 
 
@@ -46,10 +44,7 @@ ENV PYSPARK_PYTHON python3
 VOLUME ${shared_wk}
 WORKDIR ${SPARK_HOME}
 
-RUN bash -c "if ['${tipo}' == 'worker']; then echo 'bin/spark-class org.apache.spark.deploy.worker.Worker spark://${SPARK_MASTER_HOST}:${SPARK_MASTER_PORT} >> logs/spark-worker.out' > run.sh;else  echo 'bin/spark-class org.apache.spark.deploy.master.Master >> logs/spark-master.out'> run.sh;fi"
-RUN chmod +x ./run.sh
-CMD ./run.sh
-#CMD bin/spark-class org.apache.spark.deploy.master.Master >> logs/spark-master.out
+CMD bin/spark-class org.apache.spark.deploy.master.Master >> logs/spark-master.out
 #CMD if [[-z "tipo"]]; then bin/spark-class org.apache.spark.deploy.master.Master >> logs/spark-master.out; else bin/spark-class org.apache.spark.deploy.worker.Worker spark://${SPARK_MASTER_HOST}:${SPARK_MASTER_PORT} >> logs/spark-worker.out;fi
 #CMD ["bin/spark-class","if [\"${tipo}\" = master ]; then org.apache.spark.deploy.master.Master >> logs/spark-master.out;fi"]
 

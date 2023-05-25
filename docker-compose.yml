@@ -5,9 +5,7 @@ services:
   spark-master:
     build: 
       context: . 
-      dockerfile: Dockerfile
-      args:
-        tipo: "master"
+      dockerfile: Dockerfile.master
     container_name: spark-master
     ports:
       - "8080:8080"
@@ -17,9 +15,7 @@ services:
   spark-worker-1:
     build: 
       context: . 
-      dockerfile: Dockerfile
-      args:
-        tipo: "worker"
+      dockerfile: Dockerfile.worker
     container_name: spark-worker-1
     ports:
       - "8081:8081"
