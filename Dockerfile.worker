@@ -26,6 +26,8 @@ ARG hadoop_version="3"
 # - Download Apache 
 
 RUN apt-get -y install curl
+
+RUN apt-get -y install python3
 RUN curl https://archive.apache.org/dist/spark/spark-${spark_version}/spark-${spark_version}-bin-hadoop${hadoop_version}.tgz -o spark.tgz  
 RUN tar -xvzf spark.tgz
 RUN mv spark-${spark_version}-bin-hadoop${hadoop_version} /usr/bin/ 
@@ -48,6 +50,13 @@ WORKDIR ${SPARK_HOME}
 CMD bin/spark-class org.apache.spark.deploy.worker.Worker spark://${SPARK_MASTER_HOST}:${SPARK_MASTER_PORT} >> logs/spark-worker.out
 
 
+# -- move files to working directory  
 
+
+RUN mkdir -p /usr/bin/spark-${spark_version}-bin-hadoop${hadoop_version}/src 
+COPY ./src/*  /usr/bin/spark-${spark_version}-bin-hadoop${hadoop_version}/src/
+
+RUN mkdir -p /usr/bin/spark-${spark_version}-bin-hadoop${hadoop_version}/script 
+COPY ./script/*  /usr/bin/spark-${spark_version}-bin-hadoop${hadoop_version}/script/
 
 

@@ -4,7 +4,7 @@ FROM openjdk:8-jre-slim
 ARG build_date
 ARG shared_wk=/opt/workspace
 
-
+ 
 LABEL org.label-schema.build-date=${build_date}
 LABEL org.label-schema.name="Apache Base"
 
@@ -25,7 +25,10 @@ ARG hadoop_version="3"
 # - Download Apache 
 
 RUN apt-get -y install curl
+
+RUN apt-get -y install python3
 RUN curl https://archive.apache.org/dist/spark/spark-${spark_version}/spark-${spark_version}-bin-hadoop${hadoop_version}.tgz -o spark.tgz  
+RUN apt-get -y install curl
 RUN tar -xvzf spark.tgz
 RUN mv spark-${spark_version}-bin-hadoop${hadoop_version} /usr/bin/ 
 RUN echo "alias pyspark=/usr/bin/spark-${spark_version}-bin-hadoop${hadoop_version}/bin/pyspark" >> ~/.bashrc 
@@ -45,10 +48,15 @@ VOLUME ${shared_wk}
 WORKDIR ${SPARK_HOME}
 
 CMD bin/spark-class org.apache.spark.deploy.master.Master >> logs/spark-master.out
-#CMD if [[-z "tipo"]]; then bin/spark-class org.apache.spark.deploy.master.Master >> logs/spark-master.out; else bin/spark-class org.apache.spark.deploy.worker.Worker spark://${SPARK_MASTER_HOST}:${SPARK_MASTER_PORT} >> logs/spark-worker.out;fi
-#CMD ["bin/spark-class","if [\"${tipo}\" = master ]; then org.apache.spark.deploy.master.Master >> logs/spark-master.out;fi"]
+
+# -- move files to working directory 
 
 
+RUN mkdir -p /usr/bin/spark-${spark_version}-bin-hadoop${hadoop_version}/src 
+COPY ./src/*  /usr/bin/spark-${spark_version}-bin-hadoop${hadoop_version}/src/
+
+RUN mkdir -p /usr/bin/spark-${spark_version}-bin-hadoop${hadoop_version}/script 
+COPY ./script/*  /usr/bin/spark-${spark_version}-bin-hadoop${hadoop_version}/script/
 
 
 
