@@ -25,7 +25,7 @@ ARG hadoop_version="3"
 # - Download Apache 
 
 RUN apt-get -y install curl
-
+RUN apt-get -y install vim 
 RUN apt-get -y install python3
 RUN curl https://archive.apache.org/dist/spark/spark-${spark_version}/spark-${spark_version}-bin-hadoop${hadoop_version}.tgz -o spark.tgz  
 RUN apt-get -y install curl
@@ -59,4 +59,4 @@ RUN mkdir -p /usr/bin/spark-${spark_version}-bin-hadoop${hadoop_version}/script
 COPY ./script/*  /usr/bin/spark-${spark_version}-bin-hadoop${hadoop_version}/script/
 
 
-
+ 
