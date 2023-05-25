@@ -17,8 +17,25 @@ services:
       context: . 
       dockerfile: Dockerfile.worker
     container_name: spark-worker-1
+    environment:
+      - SPARK_WORKER_CORES=1
+      - SPARK_WORKER_MEMORY=512m
     ports:
       - "8081:8081"
+    volumes:
+      - shared-workspace:/opt/workspace
+    depends_on:
+      - spark-master
+  spark-worker-2:
+    build: 
+      context: . 
+      dockerfile: Dockerfile.worker
+    container_name: spark-worker-2
+    environment:
+      - SPARK_WORKER_CORES=1
+      - SPARK_WORKER_MEMORY=512m
+    ports:
+      - "8082:8082"
     volumes:
       - shared-workspace:/opt/workspace
     depends_on:
