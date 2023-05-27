@@ -1,36 +1,41 @@
 version: "3.9"
 volumes:
   shared-workspace:
+    name: "Pyspark"
+    driver: local
 services:
   spark-master:
-    build: 
-      context: . 
+    build:
+      context: .
       dockerfile: Dockerfile.master
     container_name: spark-master
     ports:
       - "8080:8080"
       - "7077:7077"
     volumes:
-      - shared-workspace:/opt/workspace
+      - shared-workspace:${WORK_DIR}
+  
   spark-worker-1:
-    build: 
-      context: . 
+    build:
+      context: .
       dockerfile: Dockerfile.worker
     container_name: spark-worker-1
     ports:
       - "8081:8081"
     volumes:
-      - shared-workspace:/opt/workspace
+      - shared-workspace:${WORK_DIR}
     depends_on:
       - spark-master
   spark-worker-2:
-    build: 
-      context: . 
+    build:
+      context: .
       dockerfile: Dockerfile.worker
     container_name: spark-worker-2
     ports:
       - "8082:8082"
     volumes:
-      - shared-workspace:/opt/workspace
+      - shared-workspace:${WORK_DIR}
     depends_on:
       - spark-master
+
+
